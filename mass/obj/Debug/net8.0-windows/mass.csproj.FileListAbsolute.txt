@@ -1,0 +1,17 @@
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.mainform.resources
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.csproj.GenerateResource.cache
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.AssemblyInfoInputs.cache
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.AssemblyInfo.cs
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.csproj.CoreCompileInputs.cache
+C:\Users\tomov\source\repos\mass\mass\bin\Debug\net8.0-windows\mass.exe
+C:\Users\tomov\source\repos\mass\mass\bin\Debug\net8.0-windows\mass.deps.json
+C:\Users\tomov\source\repos\mass\mass\bin\Debug\net8.0-windows\mass.runtimeconfig.json
+C:\Users\tomov\source\repos\mass\mass\bin\Debug\net8.0-windows\mass.dll
+C:\Users\tomov\source\repos\mass\mass\bin\Debug\net8.0-windows\mass.pdb
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.dll
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\refint\mass.dll
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.pdb
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.genruntimeconfig.cache
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\ref\mass.dll
+C:\Users\tomov\source\repos\mass\mass\obj\Debug\net8.0-windows\mass.Properties.Resources.resources
