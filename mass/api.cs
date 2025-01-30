@@ -10,7 +10,7 @@ namespace Test
     {
 
 
-        static Rootobject waidon(string url)
+        static Rootobject APIcall(string url)
         {
             using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
             {
