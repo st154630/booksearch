@@ -5,16 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Reflection.Metadata;
+using static Test.gutendex;
 
 namespace mass
 {
     public class Book
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string[] Authors { get; set; }
-        public string[] Languages { get; set; }
-        public int Downloads { get; set; }
-        public string Link {  get; set; }
+        public int id { get; set; }
+        public string title { get; set; }
+        public Author[] authors { get; set; }
+        public string[] summaries { get; set; }
+        public Translator[] translators { get; set; }
+        public string[] subjects { get; set; }
+        public string[] bookshelves { get; set; }
+        public string[] languages { get; set; }
+        public bool copyright { get; set; }
+        public string media_type { get; set; }
+        public Formats formats { get; set; }
+        public int download_count { get; set; }
     }
 }
