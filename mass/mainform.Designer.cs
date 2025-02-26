@@ -36,10 +36,10 @@
             searchBox = new TextBox();
             richTextBox1 = new RichTextBox();
             label1 = new Label();
-            textBox1 = new TextBox();
+            author_year_start = new TextBox();
             label2 = new Label();
             label3 = new Label();
-            textBox2 = new TextBox();
+            author_year_end = new TextBox();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
             label4 = new Label();
@@ -96,12 +96,13 @@
             label1.TabIndex = 8;
             label1.Text = "Search terms";
             // 
-            // textBox1
+            // author_year_start
             // 
-            textBox1.Location = new Point(12, 183);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 9;
+            author_year_start.Location = new Point(12, 183);
+            author_year_start.Name = "author_year_start";
+            author_year_start.Size = new Size(100, 23);
+            author_year_start.TabIndex = 9;
+            author_year_start.TextChanged += textBox1_TextChanged;
             // 
             // label2
             // 
@@ -121,12 +122,12 @@
             label3.TabIndex = 12;
             label3.Text = "Author year end";
             // 
-            // textBox2
+            // author_year_end
             // 
-            textBox2.Location = new Point(12, 248);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 11;
+            author_year_end.Location = new Point(12, 248);
+            author_year_end.Name = "author_year_end";
+            author_year_end.Size = new Size(100, 23);
+            author_year_end.TabIndex = 11;
             // 
             // checkBox1
             // 
@@ -147,6 +148,7 @@
             checkBox2.TabIndex = 14;
             checkBox2.Text = "No";
             checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
             // label4
             // 
@@ -166,9 +168,9 @@
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(label3);
-            Controls.Add(textBox2);
+            Controls.Add(author_year_end);
             Controls.Add(label2);
-            Controls.Add(textBox1);
+            Controls.Add(author_year_start);
             Controls.Add(label1);
             Controls.Add(richTextBox1);
             Controls.Add(searchBox);
@@ -193,10 +195,10 @@
         private TextBox searchBox;
         private RichTextBox richTextBox1;
         private Label label1;
-        private TextBox textBox1;
+        private TextBox author_year_start;
         private Label label2;
         private Label label3;
-        private TextBox textBox2;
+        private TextBox author_year_end;
         private CheckBox checkBox1;
         private CheckBox checkBox2;
         private Label label4;

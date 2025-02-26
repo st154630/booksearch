@@ -1,4 +1,5 @@
-﻿using System;
+﻿using mass;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -10,7 +11,7 @@ namespace Test
     {
 
 
-        static Rootobject APIcall(string url)
+        static Rootobject waidon(string url)
         {
             using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
             {
@@ -80,9 +81,13 @@ namespace Test
         }
 
 
-        private void DBadd(string[] args, string result)
+        private void DBadd(string[] args, Result[] results)
         {
-
+            var db = new BookContext();
+            for (int i = 0; i < results.Length; i++) 
+            {
+                db.add
+            }
         }
 
 
