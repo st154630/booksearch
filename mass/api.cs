@@ -1,7 +1,9 @@
 ﻿using mass;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -39,12 +41,12 @@ namespace Test
         {
             public int id { get; set; }
             public string title { get; set; }
-            public Author[] authors { get; set; }
-            public string[] summaries { get; set; }
-            public Translator[] translators { get; set; }
-            public string[] subjects { get; set; }
-            public string[] bookshelves { get; set; }
-            public string[] languages { get; set; }
+            public List<Author> authors { get; set; }
+            public List<string>? summaries { get; set; }
+            public List<Translator> translators { get; set; }
+            public List<string>? subjects { get; set; }
+            public List<string>? bookshelves { get; set; }
+            public List<string>? languages { get; set; }
             public bool copyright { get; set; }
             public string media_type { get; set; }
             public Formats formats { get; set; }
@@ -53,6 +55,7 @@ namespace Test
 
         public class Formats
         {
+            public int id { get; set; }
             public string texthtml { get; set; }
             public string applicationepubzip { get; set; }
             public string applicationxmobipocketebook { get; set; }
@@ -69,6 +72,8 @@ namespace Test
 
         public class Author
         {
+            [Key]
+            public int id { get; set; }
             public string name { get; set; }
             public int? birth_year { get; set; }
             public int? death_year { get; set; }
@@ -76,6 +81,8 @@ namespace Test
 
         public class Translator
         {
+            [Key]
+            public int id { get; set; }
             public string name { get; set; }
             public int? birth_year { get; set; }
             public int? death_year { get; set; }

@@ -9,10 +9,15 @@ namespace mass
     public class BookContext : DbContext
     {
         public DbSet<Book> BooksTest { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public string DbPath { get; }
+        public BookContext()
+        {
+            DbPath = "booktest.db";
+            Database.EnsureCreated();
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         
-            => optionsBuilder.UseSqlite("Data Source=booktest.db");
+            => options.UseSqlite("Data Source=booktest.db");
         
     }
 }
