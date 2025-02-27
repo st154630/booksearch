@@ -7,11 +7,12 @@ using System.Xml.Serialization;
 
 namespace Test
 {
-    public class gutendex
+
+    public class Gutendex
     {
 
 
-        static Rootobject waidon(string url)
+        public Rootobject callapi(string url)
         {
             using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
             {
@@ -19,7 +20,7 @@ namespace Test
                 HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
                 string result = response.Content.ReadAsStringAsync().Result;
-                
+
                 Rootobject? final = JsonSerializer.Deserialize<Rootobject>(result);
                 return final;
             }
@@ -86,7 +87,8 @@ namespace Test
             var db = new BookContext();
             for (int i = 0; i < results.Length; i++) 
             {
-                db.add
+                var bk = new Book() { id = results[i].id, authors = results[i].authors };
+                db.Add(bk);
             }
         }
 

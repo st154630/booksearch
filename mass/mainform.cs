@@ -1,5 +1,6 @@
 using System.Net;
 using System;
+using Test;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,21 +16,6 @@ namespace mass
         {
             InitializeComponent();
         }
-
-
-
-        private void callapi(string url)
-        {
-            using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
-            {
-                client.BaseAddress = new Uri("https://gutendex.com/books");
-                HttpResponseMessage response = client.GetAsync(url).Result;
-                response.EnsureSuccessStatusCode();
-                string result = response.Content.ReadAsStringAsync().Result;
-
-            }
-        }
-
         private string contstructLink()
         {
             if (checkBox1.Checked & !checkBox2.Checked)

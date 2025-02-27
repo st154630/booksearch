@@ -2,6 +2,7 @@ using Test;
 
 namespace mass
 {
+    
     internal static class Program
     {
         /// <summary>
