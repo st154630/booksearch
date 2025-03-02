@@ -43,8 +43,12 @@
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
             label4 = new Label();
+            authorstartbar = new TrackBar();
+            authorendbar = new TrackBar();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)authorstartbar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)authorendbar).BeginInit();
             SuspendLayout();
             // 
             // button1
@@ -67,9 +71,9 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.Control;
-            panel1.Location = new Point(334, 12);
+            panel1.Location = new Point(527, 12);
             panel1.Name = "panel1";
-            panel1.Size = new Size(733, 617);
+            panel1.Size = new Size(549, 546);
             panel1.TabIndex = 5;
             // 
             // searchBox
@@ -83,7 +87,7 @@
             // 
             richTextBox1.Location = new Point(205, 12);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(629, 529);
+            richTextBox1.Size = new Size(123, 109);
             richTextBox1.TabIndex = 7;
             richTextBox1.Text = "";
             // 
@@ -102,7 +106,7 @@
             author_year_start.Name = "author_year_start";
             author_year_start.Size = new Size(100, 23);
             author_year_start.TabIndex = 9;
-            author_year_start.TextChanged += textBox1_TextChanged;
+            author_year_start.TextChanged += author_year_start_TextChanged;
             // 
             // label2
             // 
@@ -116,7 +120,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 230);
+            label3.Location = new Point(12, 281);
             label3.Name = "label3";
             label3.Size = new Size(92, 15);
             label3.TabIndex = 12;
@@ -124,15 +128,16 @@
             // 
             // author_year_end
             // 
-            author_year_end.Location = new Point(12, 248);
+            author_year_end.Location = new Point(16, 319);
             author_year_end.Name = "author_year_end";
             author_year_end.Size = new Size(100, 23);
             author_year_end.TabIndex = 11;
+            author_year_end.TextChanged += author_year_end_TextChanged;
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(12, 310);
+            checkBox1.Location = new Point(12, 514);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(43, 19);
             checkBox1.TabIndex = 13;
@@ -142,7 +147,7 @@
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(12, 335);
+            checkBox2.Location = new Point(12, 539);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(42, 19);
             checkBox2.TabIndex = 14;
@@ -153,17 +158,39 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 292);
+            label4.Location = new Point(12, 496);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
             label4.TabIndex = 15;
             label4.Text = "Copyright ";
+            // 
+            // authorstartbar
+            // 
+            authorstartbar.Location = new Point(12, 221);
+            authorstartbar.Maximum = 2025;
+            authorstartbar.Minimum = -1105;
+            authorstartbar.Name = "authorstartbar";
+            authorstartbar.Size = new Size(316, 45);
+            authorstartbar.TabIndex = 16;
+            authorstartbar.Scroll += authorstartbar_Scroll;
+            // 
+            // authorendbar
+            // 
+            authorendbar.Location = new Point(12, 363);
+            authorendbar.Maximum = 2025;
+            authorendbar.Minimum = -1105;
+            authorendbar.Name = "authorendbar";
+            authorendbar.Size = new Size(316, 45);
+            authorendbar.TabIndex = 17;
+            authorendbar.Scroll += authorendbar_Scroll;
             // 
             // mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1088, 641);
+            Controls.Add(authorendbar);
+            Controls.Add(authorstartbar);
             Controls.Add(label4);
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
@@ -182,6 +209,8 @@
             Load += mainform_Load;
             ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)authorstartbar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)authorendbar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -202,5 +231,7 @@
         private CheckBox checkBox1;
         private CheckBox checkBox2;
         private Label label4;
+        private TrackBar authorstartbar;
+        private TrackBar authorendbar;
     }
 }

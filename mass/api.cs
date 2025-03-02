@@ -86,20 +86,8 @@ namespace Test
             public string name { get; set; }
             public int? birth_year { get; set; }
             public int? death_year { get; set; }
+
         }
-
-
-        private void DBadd(string[] args, Result[] results)
-        {
-            var db = new BookContext();
-            for (int i = 0; i < results.Length; i++) 
-            {
-                var bk = new Book() { id = results[i].id, authors = results[i].authors };
-                db.Add(bk);
-            }
-        }
-
-
     }
 }
 //https://gutendex.com/books?author_year_start=1900&author_year_end=1910&languages=en&page=1&copyright=true

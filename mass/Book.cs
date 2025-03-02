@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Reflection.Metadata;
 using static Test.Gutendex;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace mass
@@ -25,5 +26,7 @@ namespace mass
         public Formats formats { get; set; }
         public int download_count { get; set; }
     }
+    
+
 
 }
