@@ -59,11 +59,11 @@ namespace mass
         public List<string>? subjects { get; set; }
         public List<string>? bookshelves { get; set; }
         public List<string>? languages { get; set; }
-        public bool copyright { get; set; }
+        public bool? copyright { get; set; }
         public string media_type { get; set; }
         //public Formats formats { get; set; }
         public int download_count { get; set; }
-        public int score {  get; set; }
+        public float score {  get; set; }
     }
     //public class Formats
     //{

@@ -11,6 +11,9 @@ using static Test.Gutendex;
 using System.Text.Json;
 using System.Net.Http;
 using System.Xml.Serialization;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace mass
 {
@@ -32,6 +35,7 @@ namespace mass
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            await db.Books.ExecuteDeleteAsync();
             //set up constraints since doing them in constructlink every time it is called would take forever
             int page = 1;
             int start = authorstartbar.Value;
@@ -52,10 +56,11 @@ namespace mass
             var bookList = await db.Books.ToListAsync();
             foreach (var book in bookList)
             {
-                richTextBox1.Text += (book.id) + "\n";
+                richTextBox1.Text += (book.download_count) + "\n";
                 if (book.authors.Count != 0)
                 {
-                    richTextBox1.Text += (book.authors[0].id) + "\n";
+                    richTextBox1.Text += (book.authors[0].birth_year) + "\n";
+                    richTextBox1.Text += (book.authors[0].death_year) + "\n";
                 }
                 richTextBox1.Text += (book.title) + "\n";
             }
@@ -92,10 +97,12 @@ namespace mass
             //    return "?pretty=1&author_year_start=" + author_year_start.Text + "&author_year_end=" + author_year_end.Text + "&copyright=false" + "&page=" + page;
             //}
 
-                       
+
             //returns the formatted uri, its better to keep this minimal for performance
             return "?pretty=1&author_year_start=" + start + "&author_year_end=" + end + "&page=" + page;
         }
+
+
 
         public Rootobject callapi(string url)
         {
@@ -199,6 +206,55 @@ namespace mass
 
         private void label3_Click(object sender, EventArgs e)
         {
+
+        }
+
+        public void ScoreBook(ref Book book)
+        {
+            if (book != null)
+            {
+                if (book.copyright != null)
+                {
+                    if ((bool)(checkBox1.Checked & !checkBox2.Checked & book.copyright))
+                    {
+                        book.score += (float)(numericCopy.Value / 10);
+
+                    }
+                    else if ((bool)(checkBox2.Checked & !checkBox1.Checked & !book.copyright))
+                    {
+
+                        book.score += (float)(numericCopy.Value / 10);
+                    }
+                }
+                if (book.authors != null)
+                {
+                    foreach (Author author in book.authors)
+                    {
+                        int tempScore = 0;
+                        if (author != null)
+                        {
+
+
+                        }
+                    }
+                }
+                if (book.title.Contains(searchBox.Text))
+                {
+                    book.score += (float)(numericSearch.Value / 10);
+                }
+                else
+                {
+                    foreach (string summ in book.summaries)
+                    {
+                        if (summ.Contains(searchBox.Text))
+                        {
+                            book.score += (float)(numericSearch.Value / 20);
+                        }
+                    }
+                }
+
+            }
+
 
         }
     }
