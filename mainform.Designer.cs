@@ -197,6 +197,7 @@
             numericStart.Name = "numericStart";
             numericStart.Size = new Size(120, 23);
             numericStart.TabIndex = 18;
+            numericStart.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // label5
             // 
@@ -223,6 +224,7 @@
             numericEnd.Name = "numericEnd";
             numericEnd.Size = new Size(120, 23);
             numericEnd.TabIndex = 20;
+            numericEnd.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // label7
             // 
@@ -240,6 +242,7 @@
             numericSearch.Name = "numericSearch";
             numericSearch.Size = new Size(120, 23);
             numericSearch.TabIndex = 22;
+            numericSearch.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // label8
             // 
@@ -257,6 +260,7 @@
             numericCopy.Name = "numericCopy";
             numericCopy.Size = new Size(120, 23);
             numericCopy.TabIndex = 24;
+            numericCopy.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // mainform
             // 

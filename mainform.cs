@@ -35,6 +35,7 @@ namespace mass
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            
             await db.Books.ExecuteDeleteAsync();
             //set up constraints since doing them in constructlink every time it is called would take forever
             int page = 1;
@@ -47,15 +48,24 @@ namespace mass
             if (end > authorendbar.Maximum) end = authorendbar.Maximum;
             Rootobject? current = callapi(contstructLink(page, start, end));
             //call api for the first 10 pages since any more would take too long
-            while (page < 10 && current.results[1].title != null)
+
+            while (page < 10 && current.results != null)
             {
                 DBadd(callapi(contstructLink(page, start, end)).results);
                 page++;
+                if (current.count < page * 20)
+                {
+                    break;
+                }
                 current = callapi(contstructLink(page, start, end));
+                
             }
             var bookList = await db.Books.ToListAsync();
             foreach (var book in bookList)
             {
+                book.score = ScoreBook(book);
+                await db.SaveChangesAsync();
+                richTextBox1.Text += (book.score) + "\n";
                 richTextBox1.Text += (book.download_count) + "\n";
                 if (book.authors.Count != 0)
                 {
@@ -87,19 +97,10 @@ namespace mass
 
         private string contstructLink(int page, int start, int end)
         {
-            //ignore 
-            //if (checkBox1.Checked & !checkBox2.Checked)
-            //{
-            //    return "?pretty=1&author_year_start=" + author_year_start.Text + "&author_year_end=" + author_year_end.Text + "&copyright=true" + "&page=" + page;
-            //}
-            //else if (checkBox2.Checked & !checkBox1.Checked)
-            //{
-            //    return "?pretty=1&author_year_start=" + author_year_start.Text + "&author_year_end=" + author_year_end.Text + "&copyright=false" + "&page=" + page;
-            //}
-
-
             //returns the formatted uri, its better to keep this minimal for performance
-            return "?pretty=1&author_year_start=" + start + "&author_year_end=" + end + "&page=" + page;
+            string searchLink = searchBox.Text.Replace(" ", "%20");
+            richTextBox1.Text = "https://gutendex.com/books?pretty=1&author_year_start=" + start + "&author_year_end=" + end + "&page=" + page + "&search=" + searchLink;
+            return "?pretty=1&author_year_start=" + start + "&author_year_end=" + end + "&page=" + page + "&search=" + searchLink;
         }
 
 
@@ -111,7 +112,7 @@ namespace mass
             {
                 client.BaseAddress = new Uri("https://gutendex.com/books");
                 HttpResponseMessage response = client.GetAsync(url).Result;
-                response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();                
                 string result = response.Content.ReadAsStringAsync().Result;
                 Rootobject? final = JsonSerializer.Deserialize<Rootobject>(result);
                 return final;
@@ -137,6 +138,7 @@ namespace mass
                     copyright = result.copyright,
                     media_type = result.media_type,
                     download_count = result.download_count,
+                    score = result.score,
                 };
                 books.Add(bk);
             }
@@ -209,38 +211,45 @@ namespace mass
 
         }
 
-        public void ScoreBook(ref Book book)
+        public float ScoreBook(Book book)
         {
+            float score = 0;
             if (book != null)
             {
                 if (book.copyright != null)
                 {
                     if ((bool)(checkBox1.Checked & !checkBox2.Checked & book.copyright))
                     {
-                        book.score += (float)(numericCopy.Value / 10);
+                        score += (float)(numericCopy.Value);
 
                     }
                     else if ((bool)(checkBox2.Checked & !checkBox1.Checked & !book.copyright))
                     {
 
-                        book.score += (float)(numericCopy.Value / 10);
+                        score += (float)(numericCopy.Value);
                     }
                 }
                 if (book.authors != null)
                 {
                     foreach (Author author in book.authors)
-                    {
-                        int tempScore = 0;
+                    {                       
                         if (author != null)
                         {
-
+                            if (author.death_year < authorendbar.Value)
+                            {
+                                score += (float)(numericEnd.Value / 2);
+                            }
+                            if (author.birth_year > authorstartbar.Value)
+                            {
+                                score += (float)(numericEnd.Value / 2);
+                            }
 
                         }
                     }
                 }
-                if (book.title.Contains(searchBox.Text))
+                if (searchBox.Text != null && book.title.Contains(searchBox.Text))
                 {
-                    book.score += (float)(numericSearch.Value / 10);
+                    score += (float)(numericSearch.Value);
                 }
                 else
                 {
@@ -248,13 +257,13 @@ namespace mass
                     {
                         if (summ.Contains(searchBox.Text))
                         {
-                            book.score += (float)(numericSearch.Value / 20);
+                            score += (float)(numericSearch.Value / 2);
                         }
                     }
                 }
 
             }
-
+            return score;
 
         }
     }
