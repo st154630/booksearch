@@ -35,9 +35,17 @@ namespace mass
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            
-            await db.Books.ExecuteDeleteAsync();
-            //set up constraints since doing them in constructlink every time it is called would take forever
+            //clear any existing data or display for repeated searches 
+            panel1.Controls.Clear();
+            foreach (var book in db.Books)
+            {
+                book.authors.Clear();
+                book.translators.Clear();
+                db.Remove(book);
+            }
+            db.SaveChanges();
+
+            //set up constraints for link, saves time over setting up in constructLink
             int page = 1;
             int start = authorstartbar.Value;
             int end = authorendbar.Value;
@@ -58,13 +66,16 @@ namespace mass
                     break;
                 }
                 current = callapi(contstructLink(page, start, end));
-                
+
             }
             var bookList = await db.Books.ToListAsync();
+            List<Display> DisplayList = new List<Display>();
             foreach (var book in bookList)
             {
                 book.score = ScoreBook(book);
+
                 await db.SaveChangesAsync();
+
                 richTextBox1.Text += (book.score) + "\n";
                 richTextBox1.Text += (book.download_count) + "\n";
                 if (book.authors.Count != 0)
@@ -73,6 +84,12 @@ namespace mass
                     richTextBox1.Text += (book.authors[0].death_year) + "\n";
                 }
                 richTextBox1.Text += (book.title) + "\n";
+            }
+            for (int i = 0; i < bookList.Count; i++)
+            {
+                var book = bookList[i];
+                DisplayList.Add(new Display(i, book, ref panel1));
+                richTextBox1.Text += panel1.Controls.Count.ToString();
             }
 
         }
@@ -112,7 +129,7 @@ namespace mass
             {
                 client.BaseAddress = new Uri("https://gutendex.com/books");
                 HttpResponseMessage response = client.GetAsync(url).Result;
-                response.EnsureSuccessStatusCode();                
+                response.EnsureSuccessStatusCode();
                 string result = response.Content.ReadAsStringAsync().Result;
                 Rootobject? final = JsonSerializer.Deserialize<Rootobject>(result);
                 return final;
@@ -178,6 +195,7 @@ namespace mass
             // TODO : doesnt work with negative year values 
             if (int.TryParse(author_year_end.Text, out int result))
             {
+
                 if (int.Parse(author_year_end.Text) >= authorendbar.Minimum && int.Parse(author_year_end.Text) <= authorendbar.Maximum)
                 {
                     authorendbar.Value = int.Parse(author_year_end.Text);
@@ -232,7 +250,7 @@ namespace mass
                 if (book.authors != null)
                 {
                     foreach (Author author in book.authors)
-                    {                       
+                    {
                         if (author != null)
                         {
                             if (author.death_year < authorendbar.Value)
@@ -265,6 +283,26 @@ namespace mass
             }
             return score;
 
+        }
+
+        
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex == 0)
+            {
+                listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = System.Drawing.SystemColors.ControlText;
+                panel1.BackColor = button1.BackColor = BackColor = HelpButton.BackColor = System.Drawing.SystemColors.Control;
+                ForeColor = System.Drawing.SystemColors.ControlText;
+                listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = System.Drawing.SystemColors.Window;
+            }
+            if (listBox1.SelectedIndex == 1)
+            {
+                listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = System.Drawing.SystemColors.Control;
+                panel1.BackColor = button1.BackColor = BackColor = HelpButton.BackColor = Color.FromArgb(48, 48, 48);
+                ForeColor = System.Drawing.SystemColors.Control;
+                listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = Color.DimGray;
+            }
         }
     }
 }

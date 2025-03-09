@@ -52,6 +52,8 @@
             numericSearch = new NumericUpDown();
             label8 = new Label();
             numericCopy = new NumericUpDown();
+            HelpButton = new Button();
+            listBox1 = new ListBox();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)authorstartbar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)authorendbar).BeginInit();
@@ -63,6 +65,8 @@
             // 
             // button1
             // 
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.System;
             button1.Location = new Point(12, 12);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
@@ -73,14 +77,17 @@
             // 
             // panel1
             // 
+            panel1.AutoScroll = true;
             panel1.BackColor = SystemColors.Control;
-            panel1.Location = new Point(527, 12);
+            panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Location = new Point(330, 12);
             panel1.Name = "panel1";
-            panel1.Size = new Size(549, 546);
+            panel1.Size = new Size(750, 550);
             panel1.TabIndex = 5;
             // 
             // searchBox
             // 
+            searchBox.BorderStyle = BorderStyle.FixedSingle;
             searchBox.Location = new Point(6, 80);
             searchBox.Name = "searchBox";
             searchBox.Size = new Size(100, 23);
@@ -88,9 +95,9 @@
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(398, 12);
+            richTextBox1.Location = new Point(12, 402);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(123, 109);
+            richTextBox1.Size = new Size(101, 69);
             richTextBox1.TabIndex = 7;
             richTextBox1.Text = "";
             // 
@@ -105,6 +112,7 @@
             // 
             // author_year_start
             // 
+            author_year_start.BorderStyle = BorderStyle.FixedSingle;
             author_year_start.Location = new Point(8, 186);
             author_year_start.Name = "author_year_start";
             author_year_start.Size = new Size(100, 23);
@@ -132,6 +140,7 @@
             // 
             // author_year_end
             // 
+            author_year_end.BorderStyle = BorderStyle.FixedSingle;
             author_year_end.Location = new Point(12, 330);
             author_year_end.Name = "author_year_end";
             author_year_end.Size = new Size(100, 23);
@@ -192,6 +201,7 @@
             // 
             // numericStart
             // 
+            numericStart.BorderStyle = BorderStyle.FixedSingle;
             numericStart.Location = new Point(155, 186);
             numericStart.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericStart.Name = "numericStart";
@@ -219,6 +229,7 @@
             // 
             // numericEnd
             // 
+            numericEnd.BorderStyle = BorderStyle.FixedSingle;
             numericEnd.Location = new Point(155, 330);
             numericEnd.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericEnd.Name = "numericEnd";
@@ -237,6 +248,7 @@
             // 
             // numericSearch
             // 
+            numericSearch.BorderStyle = BorderStyle.FixedSingle;
             numericSearch.Location = new Point(155, 80);
             numericSearch.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericSearch.Name = "numericSearch";
@@ -247,7 +259,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(155, 448);
+            label8.Location = new Point(155, 474);
             label8.Name = "label8";
             label8.Size = new Size(88, 15);
             label8.TabIndex = 25;
@@ -255,18 +267,47 @@
             // 
             // numericCopy
             // 
-            numericCopy.Location = new Point(155, 466);
+            numericCopy.BorderStyle = BorderStyle.FixedSingle;
+            numericCopy.Location = new Point(155, 492);
             numericCopy.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericCopy.Name = "numericCopy";
             numericCopy.Size = new Size(120, 23);
             numericCopy.TabIndex = 24;
             numericCopy.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
+            // HelpButton
+            // 
+            HelpButton.FlatAppearance.BorderSize = 0;
+            HelpButton.FlatStyle = FlatStyle.System;
+            HelpButton.Location = new Point(168, 539);
+            HelpButton.Name = "HelpButton";
+            HelpButton.Size = new Size(75, 23);
+            HelpButton.TabIndex = 26;
+            HelpButton.Text = "Help";
+            HelpButton.UseVisualStyleBackColor = true;
+            // 
+            // listBox1
+            // 
+            listBox1.BorderStyle = BorderStyle.FixedSingle;
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Items.AddRange(new object[] { "Light Mode", "Dark Mode" });
+            listBox1.Location = new Point(155, 12);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(110, 32);
+            listBox1.TabIndex = 29;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            // 
             // mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BackColor = SystemColors.Control;
             ClientSize = new Size(1088, 641);
+            Controls.Add(listBox1);
+            Controls.Add(HelpButton);
             Controls.Add(label8);
             Controls.Add(numericCopy);
             Controls.Add(label7);
@@ -328,5 +369,7 @@
         private NumericUpDown numericSearch;
         private Label label8;
         private NumericUpDown numericCopy;
+        private Button HelpButton;
+        private ListBox listBox1;
     }
 }
