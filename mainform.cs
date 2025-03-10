@@ -14,6 +14,7 @@ using System.Xml.Serialization;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace mass
 {
@@ -68,11 +69,15 @@ namespace mass
                 current = callapi(contstructLink(page, start, end));
 
             }
-            var bookList = await db.Books.ToListAsync();
+            var bookList = db.Books
+                .OrderByDescending(e => e.download_count)
+                .ThenBy(e => e.id)
+                .ToList();
+            int max = bookList[0].download_count;
             List<Display> DisplayList = new List<Display>();
             foreach (var book in bookList)
             {
-                book.score = ScoreBook(book);
+                book.score = ScoreBook(book, max);
 
                 await db.SaveChangesAsync();
 
@@ -85,9 +90,13 @@ namespace mass
                 }
                 richTextBox1.Text += (book.title) + "\n";
             }
-            for (int i = 0; i < bookList.Count; i++)
+            var sortedList = db.Books
+                .OrderByDescending(e => e.score)
+                .ThenBy(e => e.id)
+                .ToList();
+            for (int i = 0; i < sortedList.Count; i++)
             {
-                var book = bookList[i];
+                var book = sortedList[i];
                 DisplayList.Add(new Display(i, book, ref panel1));
                 richTextBox1.Text += panel1.Controls.Count.ToString();
             }
@@ -192,7 +201,10 @@ namespace mass
         private void author_year_end_TextChanged(object sender, EventArgs e)
         {
             //very jank way of ensuring textbox is only numbers
-            // TODO : doesnt work with negative year values 
+            if (author_year_end.Text == "-")
+            {
+                authorendbar.Value = 0;
+            }
             if (int.TryParse(author_year_end.Text, out int result))
             {
 
@@ -201,7 +213,7 @@ namespace mass
                     authorendbar.Value = int.Parse(author_year_end.Text);
                 }
             }
-            else
+            else if (author_year_end.Text != "-")
             {
                 author_year_end.Text = "";
             }
@@ -210,15 +222,22 @@ namespace mass
 
         private void author_year_start_TextChanged(object sender, EventArgs e)
         {
-            //same as above
+
+            if (author_year_start.Text == "-")
+            {
+                authorstartbar.Value = 0;
+            }
             if (int.TryParse(author_year_start.Text, out int result))
             {
+
+
                 if (int.Parse(author_year_start.Text) >= authorstartbar.Minimum && int.Parse(author_year_start.Text) <= authorstartbar.Maximum)
                 {
                     authorstartbar.Value = int.Parse(author_year_start.Text);
                 }
+
             }
-            else
+            else if (author_year_start.Text != "-")
             {
                 author_year_start.Text = "";
             }
@@ -229,7 +248,7 @@ namespace mass
 
         }
 
-        public float ScoreBook(Book book)
+        public float ScoreBook(Book book, int max)
         {
             float score = 0;
             if (book != null)
@@ -279,30 +298,40 @@ namespace mass
                         }
                     }
                 }
+                if (book.download_count != null) 
+                {
+                    score += (float)numericDown.Value * (float)book.download_count / (float)max; 
+                }
+
 
             }
             return score;
 
         }
 
-        
+
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex == 0)
             {
-                listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = System.Drawing.SystemColors.ControlText;
+                listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = numericDown.ForeColor = System.Drawing.SystemColors.ControlText;
                 panel1.BackColor = button1.BackColor = BackColor = HelpButton.BackColor = System.Drawing.SystemColors.Control;
                 ForeColor = System.Drawing.SystemColors.ControlText;
-                listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = System.Drawing.SystemColors.Window;
+                listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = numericDown.BackColor = System.Drawing.SystemColors.Window;
             }
             if (listBox1.SelectedIndex == 1)
             {
-                listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = System.Drawing.SystemColors.Control;
+                listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = numericDown.ForeColor = System.Drawing.SystemColors.Control;
                 panel1.BackColor = button1.BackColor = BackColor = HelpButton.BackColor = Color.FromArgb(48, 48, 48);
                 ForeColor = System.Drawing.SystemColors.Control;
-                listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = Color.DimGray;
+                listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = numericDown.BackColor = Color.DimGray;
             }
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

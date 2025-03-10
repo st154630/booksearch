@@ -33,7 +33,6 @@
             panel1 = new Panel();
             bindingSource1 = new BindingSource(components);
             searchBox = new TextBox();
-            richTextBox1 = new RichTextBox();
             label1 = new Label();
             author_year_start = new TextBox();
             label2 = new Label();
@@ -54,6 +53,10 @@
             numericCopy = new NumericUpDown();
             HelpButton = new Button();
             listBox1 = new ListBox();
+            richTextBox1 = new RichTextBox();
+            label9 = new Label();
+            numericDown = new NumericUpDown();
+            label10 = new Label();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)authorstartbar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)authorendbar).BeginInit();
@@ -61,6 +64,7 @@
             ((System.ComponentModel.ISupportInitialize)numericEnd).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericSearch).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericCopy).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericDown).BeginInit();
             SuspendLayout();
             // 
             // button1
@@ -92,14 +96,6 @@
             searchBox.Name = "searchBox";
             searchBox.Size = new Size(100, 23);
             searchBox.TabIndex = 6;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(12, 402);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(101, 69);
-            richTextBox1.TabIndex = 7;
-            richTextBox1.Text = "";
             // 
             // label1
             // 
@@ -298,6 +294,43 @@
             listBox1.TabIndex = 29;
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(223, 96);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(101, 69);
+            richTextBox1.TabIndex = 7;
+            richTextBox1.Text = "";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(155, 402);
+            label9.Name = "label9";
+            label9.Size = new Size(88, 15);
+            label9.TabIndex = 31;
+            label9.Text = "Importance /10";
+            // 
+            // numericDown
+            // 
+            numericDown.BorderStyle = BorderStyle.FixedSingle;
+            numericDown.Location = new Point(155, 420);
+            numericDown.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericDown.Name = "numericDown";
+            numericDown.Size = new Size(120, 23);
+            numericDown.TabIndex = 30;
+            numericDown.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(12, 402);
+            label10.Name = "label10";
+            label10.Size = new Size(66, 15);
+            label10.TabIndex = 32;
+            label10.Text = "Downloads";
+            label10.Click += label10_Click;
+            // 
             // mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -306,6 +339,9 @@
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1088, 641);
+            Controls.Add(label10);
+            Controls.Add(label9);
+            Controls.Add(numericDown);
             Controls.Add(listBox1);
             Controls.Add(HelpButton);
             Controls.Add(label8);
@@ -340,6 +376,7 @@
             ((System.ComponentModel.ISupportInitialize)numericEnd).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericSearch).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericCopy).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -350,7 +387,6 @@
         private Panel panel1;
         private BindingSource bindingSource1;
         private TextBox searchBox;
-        private RichTextBox richTextBox1;
         private Label label1;
         private TextBox author_year_start;
         private Label label2;
@@ -371,5 +407,9 @@
         private NumericUpDown numericCopy;
         private Button HelpButton;
         private ListBox listBox1;
+        private RichTextBox richTextBox1;
+        private Label label9;
+        private NumericUpDown numericDown;
+        private Label label10;
     }
 }
