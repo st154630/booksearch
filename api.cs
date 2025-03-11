@@ -25,7 +25,7 @@ namespace Test
             public Result[] results { get; set; }
         }
 
-        //change the name of the book class for convenience
+        //change the name of the book class to distinguish between api and database
         public class Result : Book
         {
             

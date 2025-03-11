@@ -51,9 +51,7 @@
             numericSearch = new NumericUpDown();
             label8 = new Label();
             numericCopy = new NumericUpDown();
-            HelpButton = new Button();
             listBox1 = new ListBox();
-            richTextBox1 = new RichTextBox();
             label9 = new Label();
             numericDown = new NumericUpDown();
             label10 = new Label();
@@ -122,7 +120,8 @@
             label2.Name = "label2";
             label2.Size = new Size(98, 15);
             label2.TabIndex = 10;
-            label2.Text = "Author alive after";
+            label2.Text = "Author birth year";
+            
             // 
             // label3
             // 
@@ -131,8 +130,7 @@
             label3.Name = "label3";
             label3.Size = new Size(108, 15);
             label3.TabIndex = 12;
-            label3.Text = "Author alive before";
-            label3.Click += label3_Click;
+            label3.Text = "Author death year";
             // 
             // author_year_end
             // 
@@ -162,7 +160,6 @@
             checkBox2.TabIndex = 14;
             checkBox2.Text = "No";
             checkBox2.UseVisualStyleBackColor = true;
-            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
             // label4
             // 
@@ -271,17 +268,6 @@
             numericCopy.TabIndex = 24;
             numericCopy.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
-            // HelpButton
-            // 
-            HelpButton.FlatAppearance.BorderSize = 0;
-            HelpButton.FlatStyle = FlatStyle.System;
-            HelpButton.Location = new Point(168, 539);
-            HelpButton.Name = "HelpButton";
-            HelpButton.Size = new Size(75, 23);
-            HelpButton.TabIndex = 26;
-            HelpButton.Text = "Help";
-            HelpButton.UseVisualStyleBackColor = true;
-            // 
             // listBox1
             // 
             listBox1.BorderStyle = BorderStyle.FixedSingle;
@@ -293,14 +279,6 @@
             listBox1.Size = new Size(110, 32);
             listBox1.TabIndex = 29;
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(223, 96);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(101, 69);
-            richTextBox1.TabIndex = 7;
-            richTextBox1.Text = "";
             // 
             // label9
             // 
@@ -329,7 +307,6 @@
             label10.Size = new Size(66, 15);
             label10.TabIndex = 32;
             label10.Text = "Downloads";
-            label10.Click += label10_Click;
             // 
             // mainform
             // 
@@ -343,7 +320,6 @@
             Controls.Add(label9);
             Controls.Add(numericDown);
             Controls.Add(listBox1);
-            Controls.Add(HelpButton);
             Controls.Add(label8);
             Controls.Add(numericCopy);
             Controls.Add(label7);
@@ -362,7 +338,6 @@
             Controls.Add(label2);
             Controls.Add(author_year_start);
             Controls.Add(label1);
-            Controls.Add(richTextBox1);
             Controls.Add(searchBox);
             Controls.Add(panel1);
             Controls.Add(button1);
@@ -405,9 +380,7 @@
         private NumericUpDown numericSearch;
         private Label label8;
         private NumericUpDown numericCopy;
-        private Button HelpButton;
         private ListBox listBox1;
-        private RichTextBox richTextBox1;
         private Label label9;
         private NumericUpDown numericDown;
         private Label label10;

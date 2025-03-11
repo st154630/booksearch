@@ -36,7 +36,8 @@ namespace mass
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            //clear any existing data or display for repeated searches 
+            Enabled = false;
+            //clear any existing data or display to allow for repeated searches 
             panel1.Controls.Clear();
             foreach (var book in db.Books)
             {
@@ -56,68 +57,62 @@ namespace mass
             if (start < authorstartbar.Minimum) start = authorstartbar.Minimum;
             if (end > authorendbar.Maximum) end = authorendbar.Maximum;
             Rootobject? current = callapi(contstructLink(page, start, end));
-            //call api for the first 10 pages since any more would take too long
 
-            while (page < 10 && current.results != null)
+            //call api for the first 10 pages
+            if (current != null)
             {
-                DBadd(callapi(contstructLink(page, start, end)).results);
-                page++;
-                if (current.count < page * 20)
+                while (page < 10 && current != null && current.results != null)
                 {
-                    break;
+                    DBadd(callapi(contstructLink(page, start, end)).results);
+                    page++;
+                    if (current.count < page * 20)
+                    {
+                        break;
+                    }
+                    current = callapi(contstructLink(page, start, end));
+
                 }
-                current = callapi(contstructLink(page, start, end));
 
-            }
-            var bookList = db.Books
-                .OrderByDescending(e => e.download_count)
-                .ThenBy(e => e.id)
-                .ToList();
-            int max = bookList[0].download_count;
-            List<Display> DisplayList = new List<Display>();
-            foreach (var book in bookList)
-            {
-                book.score = ScoreBook(book, max);
 
-                await db.SaveChangesAsync();
+                //get all books from the database and calculate score
+                var bookList = db.Books
+                    .OrderByDescending(e => e.download_count)
+                    .ThenBy(e => e.id)
+                    .ToList();
 
-                richTextBox1.Text += (book.score) + "\n";
-                richTextBox1.Text += (book.download_count) + "\n";
-                if (book.authors.Count != 0)
+                int max = bookList[0].download_count;
+                foreach (var book in bookList)
                 {
-                    richTextBox1.Text += (book.authors[0].birth_year) + "\n";
-                    richTextBox1.Text += (book.authors[0].death_year) + "\n";
+                    book.score = ScoreBook(book, max);
+                    await db.SaveChangesAsync();
                 }
-                richTextBox1.Text += (book.title) + "\n";
+
+
+                List<Display> DisplayList = new List<Display>();
+                //sort list by score and display all results
+                //timing here for displaying all results is miniscule compared to calling the api
+                var sortedList = db.Books
+                    .OrderByDescending(e => e.score)
+                    .ThenBy(e => e.id)
+                    .ToList();
+                Enabled = true; //reenable form now that search is complete
+                for (int i = 0; i < sortedList.Count; i++)
+                {
+                    var book = sortedList[i];
+                    DisplayList.Add(new Display(i, book, ref panel1));
+
+                }
             }
-            var sortedList = db.Books
-                .OrderByDescending(e => e.score)
-                .ThenBy(e => e.id)
-                .ToList();
-            for (int i = 0; i < sortedList.Count; i++)
+            else
             {
-                var book = sortedList[i];
-                DisplayList.Add(new Display(i, book, ref panel1));
-                richTextBox1.Text += panel1.Controls.Count.ToString();
+                Enabled = true;
+                Label label = new Label();
+                label.Location = new Point(350, 225);
+                label.Text = "No results";
+                panel1.Controls.Add(label);
             }
 
         }
-
-        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
 
 
 
@@ -125,7 +120,6 @@ namespace mass
         {
             //returns the formatted uri, its better to keep this minimal for performance
             string searchLink = searchBox.Text.Replace(" ", "%20");
-            richTextBox1.Text = "https://gutendex.com/books?pretty=1&author_year_start=" + start + "&author_year_end=" + end + "&page=" + page + "&search=" + searchLink;
             return "?pretty=1&author_year_start=" + start + "&author_year_end=" + end + "&page=" + page + "&search=" + searchLink;
         }
 
@@ -138,17 +132,31 @@ namespace mass
             {
                 client.BaseAddress = new Uri("https://gutendex.com/books");
                 HttpResponseMessage response = client.GetAsync(url).Result;
-                response.EnsureSuccessStatusCode();
-                string result = response.Content.ReadAsStringAsync().Result;
-                Rootobject? final = JsonSerializer.Deserialize<Rootobject>(result);
-                return final;
+                //this is the easiest way to ensure the program doesn't crash when a result is returned with 0 books in it
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    Rootobject? final = JsonSerializer.Deserialize<Rootobject>(result);
+                    if (final.results.Count() > 0)
+                    {
+                        return final;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
         private async void DBadd(Result[] results)
         {
             var books = new List<Book>();
-            // adds each book to the database, currently missing formats
+            //adds each book to the database
             foreach (var result in results)
             {
                 var bk = new Book
@@ -187,9 +195,9 @@ namespace mass
 
         private void authorstartbar_Scroll(object sender, EventArgs e)
         {
-            //see above comment
+            //let user see the value of the bar
             author_year_start.Text = authorstartbar.Value.ToString();
-            //same basic idea as the end bar
+            //ensure end year is not before start year
             if (authorstartbar.Value > authorendbar.Value)
             {
                 authorendbar.Value = authorstartbar.Value;
@@ -200,7 +208,7 @@ namespace mass
 
         private void author_year_end_TextChanged(object sender, EventArgs e)
         {
-            //very jank way of ensuring textbox is only numbers
+            //ensure textbox is either only numbers or just a - sign
             if (author_year_end.Text == "-")
             {
                 authorendbar.Value = 0;
@@ -222,7 +230,7 @@ namespace mass
 
         private void author_year_start_TextChanged(object sender, EventArgs e)
         {
-
+            //ensure textbox is either only numbers or just a - sign
             if (author_year_start.Text == "-")
             {
                 authorstartbar.Value = 0;
@@ -243,16 +251,13 @@ namespace mass
             }
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
 
         public float ScoreBook(Book book, int max)
         {
             float score = 0;
             if (book != null)
             {
+                //add score based on copyright and weigh by user input
                 if (book.copyright != null)
                 {
                     if ((bool)(checkBox1.Checked & !checkBox2.Checked & book.copyright))
@@ -266,30 +271,34 @@ namespace mass
                         score += (float)(numericCopy.Value);
                     }
                 }
+                //if the book has listed authors that conform to the requirements set by the user add score
                 if (book.authors != null)
                 {
+                    int i = 1;
                     foreach (Author author in book.authors)
                     {
                         if (author != null)
                         {
                             if (author.death_year < authorendbar.Value)
                             {
-                                score += (float)(numericEnd.Value / 2);
+                                score += (float)(numericEnd.Value / (2 * i * i));
                             }
                             if (author.birth_year > authorstartbar.Value)
                             {
-                                score += (float)(numericEnd.Value / 2);
+                                score += (float)(numericEnd.Value / (2 * i * i));
                             }
-
+                            i++;
                         }
                     }
                 }
+                //if title contains text from the search add score
                 if (searchBox.Text != null && book.title.Contains(searchBox.Text))
                 {
                     score += (float)(numericSearch.Value);
                 }
                 else
                 {
+                    //extra case for if one of the summaries contains search text
                     foreach (string summ in book.summaries)
                     {
                         if (summ.Contains(searchBox.Text))
@@ -298,9 +307,10 @@ namespace mass
                         }
                     }
                 }
-                if (book.download_count != null) 
+                //score downloads based on fraction of the most downloaded book in the list
+                if (book.download_count != null)
                 {
-                    score += (float)numericDown.Value * (float)book.download_count / (float)max; 
+                    score += (float)numericDown.Value * (float)book.download_count / (float)max;
                 }
 
 
@@ -313,25 +323,23 @@ namespace mass
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //assigns 4 base colours to the ui depending on if it is set to dark or light mode
             if (listBox1.SelectedIndex == 0)
             {
                 listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = numericDown.ForeColor = System.Drawing.SystemColors.ControlText;
-                panel1.BackColor = button1.BackColor = BackColor = HelpButton.BackColor = System.Drawing.SystemColors.Control;
+                panel1.BackColor = button1.BackColor = BackColor = System.Drawing.SystemColors.Control;
                 ForeColor = System.Drawing.SystemColors.ControlText;
                 listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = numericDown.BackColor = System.Drawing.SystemColors.Window;
             }
             if (listBox1.SelectedIndex == 1)
             {
                 listBox1.ForeColor = button1.ForeColor = searchBox.ForeColor = numericSearch.ForeColor = author_year_start.ForeColor = author_year_end.ForeColor = numericStart.ForeColor = numericEnd.ForeColor = numericCopy.ForeColor = numericDown.ForeColor = System.Drawing.SystemColors.Control;
-                panel1.BackColor = button1.BackColor = BackColor = HelpButton.BackColor = Color.FromArgb(48, 48, 48);
+                panel1.BackColor = button1.BackColor = BackColor = Color.FromArgb(48, 48, 48);
                 ForeColor = System.Drawing.SystemColors.Control;
                 listBox1.BackColor = button1.BackColor = searchBox.BackColor = numericSearch.BackColor = author_year_start.BackColor = author_year_end.BackColor = numericStart.BackColor = numericEnd.BackColor = numericCopy.BackColor = numericDown.BackColor = Color.DimGray;
             }
         }
 
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }

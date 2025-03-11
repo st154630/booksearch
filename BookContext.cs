@@ -20,24 +20,22 @@ namespace mass
         public string DbPath { get; }
         public BookContext()
         {
-            //define the basic stuff
+            //define path, ensure the database is empty 
             DbPath = "booktest.db";
             Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // TEMPORARY, THE DATA LOGGING SHOULD NOT BE IN THE FINAL CODE
-            options.EnableSensitiveDataLogging();
             options.UseSqlite("Data Source=booktest.db");
-            options.LogTo(message => Debug.WriteLine(message));
+            
         }
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //just in case the [Key] in the class definition didnt work
+            //ensure author and translator keys are correctly created
 
             modelBuilder.Entity<Author>()
                 .HasKey(e => new{e.auid});
@@ -48,7 +46,7 @@ namespace mass
     }
 
 
-    //model for how the gutendex db is roughly structured
+    //database structure
     public class Book
     {
         public int id { get; set; }
